@@ -1,0 +1,742 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="dbLivroReceitaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Ingrediente">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nome" Type="nvarchar" MaxLength="255" />
+          <Property Name="ItemTipoID" Type="int" />
+        </EntityType>
+        <EntityType Name="IngredientesReceita">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReceitaID" Type="int" />
+          <Property Name="IngredienteID" Type="int" />
+          <Property Name="qtdGramas" Type="int" />
+        </EntityType>
+        <EntityType Name="NotaReceita">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReceitaID" Type="int" />
+          <Property Name="UsuarioID" Type="int" />
+          <Property Name="nota" Type="int" />
+        </EntityType>
+        <EntityType Name="Perfil">
+          <Key>
+            <PropertyRef Name="idPerfil" />
+          </Key>
+          <Property Name="idPerfil" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idUsuario" Type="int" />
+          <Property Name="idIngrediente" Type="int" />
+          <Property Name="status" Type="bit" />
+        </EntityType>
+        <EntityType Name="ProcedimentoReceitas">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userRecipeID" Type="int" />
+          <Property Name="step" Type="nvarchar" MaxLength="255" />
+          <Property Name="stepSequence" Type="int" />
+        </EntityType>
+        <EntityType Name="ReceitaFavorira">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UsuarioID" Type="int" />
+          <Property Name="ReceitaID" Type="int" />
+          <Property Name="saved" Type="int" />
+        </EntityType>
+        <EntityType Name="TipoReceita">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="TiposItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tipo" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="255" />
+          <Property Name="nome" Type="nvarchar" MaxLength="255" />
+          <Property Name="senha" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="UsuarioReceita">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UsuarioID" Type="int" />
+          <Property Name="NomeReceita" Type="nvarchar" MaxLength="255" />
+          <Property Name="TipoReceitaID" Type="int" />
+          <Property Name="TempoMinutos" Type="int" />
+        </EntityType>
+        <Association Name="FK_IngredientesReceita_Ingrediente">
+          <End Role="Ingrediente" Type="Self.Ingrediente" Multiplicity="0..1" />
+          <End Role="IngredientesReceita" Type="Self.IngredientesReceita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingrediente">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="IngredientesReceita">
+              <PropertyRef Name="IngredienteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IngredientesReceita_UsuarioReceita">
+          <End Role="UsuarioReceita" Type="Self.UsuarioReceita" Multiplicity="0..1" />
+          <End Role="IngredientesReceita" Type="Self.IngredientesReceita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsuarioReceita">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="IngredientesReceita">
+              <PropertyRef Name="ReceitaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Perfil_Ingrediente">
+          <End Role="Ingrediente" Type="Self.Ingrediente" Multiplicity="0..1" />
+          <End Role="Perfil" Type="Self.Perfil" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingrediente">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Perfil">
+              <PropertyRef Name="idIngrediente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Perfil_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Perfil" Type="Self.Perfil" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Perfil">
+              <PropertyRef Name="idUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_recipeItems_ItemTypes">
+          <End Role="TiposItem" Type="Self.TiposItem" Multiplicity="0..1" />
+          <End Role="Ingrediente" Type="Self.Ingrediente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TiposItem">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Ingrediente">
+              <PropertyRef Name="ItemTipoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_recipesRating_userRecipes">
+          <End Role="UsuarioReceita" Type="Self.UsuarioReceita" Multiplicity="0..1" />
+          <End Role="NotaReceita" Type="Self.NotaReceita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsuarioReceita">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="NotaReceita">
+              <PropertyRef Name="ReceitaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_recipesRating_users">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="NotaReceita" Type="Self.NotaReceita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="NotaReceita">
+              <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_userFavoriteRecipes_userRecipes">
+          <End Role="UsuarioReceita" Type="Self.UsuarioReceita" Multiplicity="0..1" />
+          <End Role="ReceitaFavorira" Type="Self.ReceitaFavorira" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsuarioReceita">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ReceitaFavorira">
+              <PropertyRef Name="ReceitaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_userFavoriteRecipes_users">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="ReceitaFavorira" Type="Self.ReceitaFavorira" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ReceitaFavorira">
+              <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_userRecipes_recipeType">
+          <End Role="TipoReceita" Type="Self.TipoReceita" Multiplicity="0..1" />
+          <End Role="UsuarioReceita" Type="Self.UsuarioReceita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoReceita">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UsuarioReceita">
+              <PropertyRef Name="TipoReceitaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_userRecipes_users">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="UsuarioReceita" Type="Self.UsuarioReceita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UsuarioReceita">
+              <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_usersRecipesProcedures_userRecipes">
+          <End Role="UsuarioReceita" Type="Self.UsuarioReceita" Multiplicity="0..1" />
+          <End Role="ProcedimentoReceitas" Type="Self.ProcedimentoReceitas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsuarioReceita">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ProcedimentoReceitas">
+              <PropertyRef Name="userRecipeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="dbLivroReceitaModelStoreContainer">
+          <EntitySet Name="Ingrediente" EntityType="Self.Ingrediente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IngredientesReceita" EntityType="Self.IngredientesReceita" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NotaReceita" EntityType="Self.NotaReceita" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Perfil" EntityType="Self.Perfil" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProcedimentoReceitas" EntityType="Self.ProcedimentoReceitas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReceitaFavorira" EntityType="Self.ReceitaFavorira" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TipoReceita" EntityType="Self.TipoReceita" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TiposItem" EntityType="Self.TiposItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UsuarioReceita" EntityType="Self.UsuarioReceita" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_IngredientesReceita_Ingrediente" Association="Self.FK_IngredientesReceita_Ingrediente">
+            <End Role="Ingrediente" EntitySet="Ingrediente" />
+            <End Role="IngredientesReceita" EntitySet="IngredientesReceita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IngredientesReceita_UsuarioReceita" Association="Self.FK_IngredientesReceita_UsuarioReceita">
+            <End Role="UsuarioReceita" EntitySet="UsuarioReceita" />
+            <End Role="IngredientesReceita" EntitySet="IngredientesReceita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Perfil_Ingrediente" Association="Self.FK_Perfil_Ingrediente">
+            <End Role="Ingrediente" EntitySet="Ingrediente" />
+            <End Role="Perfil" EntitySet="Perfil" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Perfil_Usuario" Association="Self.FK_Perfil_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Perfil" EntitySet="Perfil" />
+          </AssociationSet>
+          <AssociationSet Name="FK_recipeItems_ItemTypes" Association="Self.FK_recipeItems_ItemTypes">
+            <End Role="TiposItem" EntitySet="TiposItem" />
+            <End Role="Ingrediente" EntitySet="Ingrediente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_recipesRating_userRecipes" Association="Self.FK_recipesRating_userRecipes">
+            <End Role="UsuarioReceita" EntitySet="UsuarioReceita" />
+            <End Role="NotaReceita" EntitySet="NotaReceita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_recipesRating_users" Association="Self.FK_recipesRating_users">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="NotaReceita" EntitySet="NotaReceita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_userFavoriteRecipes_userRecipes" Association="Self.FK_userFavoriteRecipes_userRecipes">
+            <End Role="UsuarioReceita" EntitySet="UsuarioReceita" />
+            <End Role="ReceitaFavorira" EntitySet="ReceitaFavorira" />
+          </AssociationSet>
+          <AssociationSet Name="FK_userFavoriteRecipes_users" Association="Self.FK_userFavoriteRecipes_users">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="ReceitaFavorira" EntitySet="ReceitaFavorira" />
+          </AssociationSet>
+          <AssociationSet Name="FK_userRecipes_recipeType" Association="Self.FK_userRecipes_recipeType">
+            <End Role="TipoReceita" EntitySet="TipoReceita" />
+            <End Role="UsuarioReceita" EntitySet="UsuarioReceita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_userRecipes_users" Association="Self.FK_userRecipes_users">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="UsuarioReceita" EntitySet="UsuarioReceita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_usersRecipesProcedures_userRecipes" Association="Self.FK_usersRecipesProcedures_userRecipes">
+            <End Role="UsuarioReceita" EntitySet="UsuarioReceita" />
+            <End Role="ProcedimentoReceitas" EntitySet="ProcedimentoReceitas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="dbLivroReceitaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Ingrediente">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nome" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ItemTipoID" Type="Int32" />
+          <NavigationProperty Name="IngredientesReceita" Relationship="Self.FK_IngredientesReceita_Ingrediente" FromRole="Ingrediente" ToRole="IngredientesReceita" />
+          <NavigationProperty Name="Perfil" Relationship="Self.FK_Perfil_Ingrediente" FromRole="Ingrediente" ToRole="Perfil" />
+          <NavigationProperty Name="TiposItem" Relationship="Self.FK_recipeItems_ItemTypes" FromRole="Ingrediente" ToRole="TiposItem" />
+        </EntityType>
+        <EntityType Name="IngredientesReceita">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReceitaID" Type="Int32" />
+          <Property Name="IngredienteID" Type="Int32" />
+          <Property Name="qtdGramas" Type="Int32" />
+          <NavigationProperty Name="Ingrediente" Relationship="Self.FK_IngredientesReceita_Ingrediente" FromRole="IngredientesReceita" ToRole="Ingrediente" />
+          <NavigationProperty Name="UsuarioReceita" Relationship="Self.FK_IngredientesReceita_UsuarioReceita" FromRole="IngredientesReceita" ToRole="UsuarioReceita" />
+        </EntityType>
+        <EntityType Name="NotaReceita">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReceitaID" Type="Int32" />
+          <Property Name="UsuarioID" Type="Int32" />
+          <Property Name="nota" Type="Int32" />
+          <NavigationProperty Name="UsuarioReceita" Relationship="Self.FK_recipesRating_userRecipes" FromRole="NotaReceita" ToRole="UsuarioReceita" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_recipesRating_users" FromRole="NotaReceita" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Perfil">
+          <Key>
+            <PropertyRef Name="idPerfil" />
+          </Key>
+          <Property Name="idPerfil" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idUsuario" Type="Int32" />
+          <Property Name="idIngrediente" Type="Int32" />
+          <Property Name="status" Type="Boolean" />
+          <NavigationProperty Name="Ingrediente" Relationship="Self.FK_Perfil_Ingrediente" FromRole="Perfil" ToRole="Ingrediente" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_Perfil_Usuario" FromRole="Perfil" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="ProcedimentoReceitas">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userRecipeID" Type="Int32" />
+          <Property Name="step" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="stepSequence" Type="Int32" />
+          <NavigationProperty Name="UsuarioReceita" Relationship="Self.FK_usersRecipesProcedures_userRecipes" FromRole="ProcedimentoReceitas" ToRole="UsuarioReceita" />
+        </EntityType>
+        <EntityType Name="ReceitaFavorira">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UsuarioID" Type="Int32" />
+          <Property Name="ReceitaID" Type="Int32" />
+          <Property Name="saved" Type="Int32" />
+          <NavigationProperty Name="UsuarioReceita" Relationship="Self.FK_userFavoriteRecipes_userRecipes" FromRole="ReceitaFavorira" ToRole="UsuarioReceita" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_userFavoriteRecipes_users" FromRole="ReceitaFavorira" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="TipoReceita">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UsuarioReceita" Relationship="Self.FK_userRecipes_recipeType" FromRole="TipoReceita" ToRole="UsuarioReceita" />
+        </EntityType>
+        <EntityType Name="TiposItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tipo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Ingrediente" Relationship="Self.FK_recipeItems_ItemTypes" FromRole="TiposItem" ToRole="Ingrediente" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="nome" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="senha" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="NotaReceita" Relationship="Self.FK_recipesRating_users" FromRole="Usuario" ToRole="NotaReceita" />
+          <NavigationProperty Name="Perfil" Relationship="Self.FK_Perfil_Usuario" FromRole="Usuario" ToRole="Perfil" />
+          <NavigationProperty Name="ReceitaFavorira" Relationship="Self.FK_userFavoriteRecipes_users" FromRole="Usuario" ToRole="ReceitaFavorira" />
+          <NavigationProperty Name="UsuarioReceita" Relationship="Self.FK_userRecipes_users" FromRole="Usuario" ToRole="UsuarioReceita" />
+        </EntityType>
+        <EntityType Name="UsuarioReceita">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UsuarioID" Type="Int32" />
+          <Property Name="NomeReceita" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="TipoReceitaID" Type="Int32" />
+          <Property Name="TempoMinutos" Type="Int32" />
+          <NavigationProperty Name="IngredientesReceita" Relationship="Self.FK_IngredientesReceita_UsuarioReceita" FromRole="UsuarioReceita" ToRole="IngredientesReceita" />
+          <NavigationProperty Name="NotaReceita" Relationship="Self.FK_recipesRating_userRecipes" FromRole="UsuarioReceita" ToRole="NotaReceita" />
+          <NavigationProperty Name="ProcedimentoReceitas" Relationship="Self.FK_usersRecipesProcedures_userRecipes" FromRole="UsuarioReceita" ToRole="ProcedimentoReceitas" />
+          <NavigationProperty Name="ReceitaFavorira" Relationship="Self.FK_userFavoriteRecipes_userRecipes" FromRole="UsuarioReceita" ToRole="ReceitaFavorira" />
+          <NavigationProperty Name="TipoReceita" Relationship="Self.FK_userRecipes_recipeType" FromRole="UsuarioReceita" ToRole="TipoReceita" />
+          <NavigationProperty Name="Usuario" Relationship="Self.FK_userRecipes_users" FromRole="UsuarioReceita" ToRole="Usuario" />
+        </EntityType>
+        <Association Name="FK_IngredientesReceita_Ingrediente">
+          <End Role="Ingrediente" Type="Self.Ingrediente" Multiplicity="0..1" />
+          <End Role="IngredientesReceita" Type="Self.IngredientesReceita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingrediente">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="IngredientesReceita">
+              <PropertyRef Name="IngredienteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Perfil_Ingrediente">
+          <End Role="Ingrediente" Type="Self.Ingrediente" Multiplicity="0..1" />
+          <End Role="Perfil" Type="Self.Perfil" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingrediente">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Perfil">
+              <PropertyRef Name="idIngrediente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_recipeItems_ItemTypes">
+          <End Role="TiposItem" Type="Self.TiposItem" Multiplicity="0..1" />
+          <End Role="Ingrediente" Type="Self.Ingrediente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TiposItem">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Ingrediente">
+              <PropertyRef Name="ItemTipoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_IngredientesReceita_UsuarioReceita">
+          <End Role="UsuarioReceita" Type="Self.UsuarioReceita" Multiplicity="0..1" />
+          <End Role="IngredientesReceita" Type="Self.IngredientesReceita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsuarioReceita">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="IngredientesReceita">
+              <PropertyRef Name="ReceitaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_recipesRating_userRecipes">
+          <End Role="UsuarioReceita" Type="Self.UsuarioReceita" Multiplicity="0..1" />
+          <End Role="NotaReceita" Type="Self.NotaReceita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsuarioReceita">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="NotaReceita">
+              <PropertyRef Name="ReceitaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_recipesRating_users">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="NotaReceita" Type="Self.NotaReceita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="NotaReceita">
+              <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Perfil_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Perfil" Type="Self.Perfil" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Perfil">
+              <PropertyRef Name="idUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_usersRecipesProcedures_userRecipes">
+          <End Role="UsuarioReceita" Type="Self.UsuarioReceita" Multiplicity="0..1" />
+          <End Role="ProcedimentoReceitas" Type="Self.ProcedimentoReceitas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsuarioReceita">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ProcedimentoReceitas">
+              <PropertyRef Name="userRecipeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_userFavoriteRecipes_userRecipes">
+          <End Role="UsuarioReceita" Type="Self.UsuarioReceita" Multiplicity="0..1" />
+          <End Role="ReceitaFavorira" Type="Self.ReceitaFavorira" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UsuarioReceita">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ReceitaFavorira">
+              <PropertyRef Name="ReceitaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_userFavoriteRecipes_users">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="ReceitaFavorira" Type="Self.ReceitaFavorira" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ReceitaFavorira">
+              <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_userRecipes_recipeType">
+          <End Role="TipoReceita" Type="Self.TipoReceita" Multiplicity="0..1" />
+          <End Role="UsuarioReceita" Type="Self.UsuarioReceita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoReceita">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UsuarioReceita">
+              <PropertyRef Name="TipoReceitaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_userRecipes_users">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="UsuarioReceita" Type="Self.UsuarioReceita" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UsuarioReceita">
+              <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="dbLivroReceitaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Ingrediente" EntityType="Self.Ingrediente" />
+          <EntitySet Name="IngredientesReceita" EntityType="Self.IngredientesReceita" />
+          <EntitySet Name="NotaReceita" EntityType="Self.NotaReceita" />
+          <EntitySet Name="Perfil" EntityType="Self.Perfil" />
+          <EntitySet Name="ProcedimentoReceitas" EntityType="Self.ProcedimentoReceitas" />
+          <EntitySet Name="ReceitaFavorira" EntityType="Self.ReceitaFavorira" />
+          <EntitySet Name="TipoReceita" EntityType="Self.TipoReceita" />
+          <EntitySet Name="TiposItem" EntityType="Self.TiposItem" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" />
+          <EntitySet Name="UsuarioReceita" EntityType="Self.UsuarioReceita" />
+          <AssociationSet Name="FK_IngredientesReceita_Ingrediente" Association="Self.FK_IngredientesReceita_Ingrediente">
+            <End Role="Ingrediente" EntitySet="Ingrediente" />
+            <End Role="IngredientesReceita" EntitySet="IngredientesReceita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Perfil_Ingrediente" Association="Self.FK_Perfil_Ingrediente">
+            <End Role="Ingrediente" EntitySet="Ingrediente" />
+            <End Role="Perfil" EntitySet="Perfil" />
+          </AssociationSet>
+          <AssociationSet Name="FK_recipeItems_ItemTypes" Association="Self.FK_recipeItems_ItemTypes">
+            <End Role="TiposItem" EntitySet="TiposItem" />
+            <End Role="Ingrediente" EntitySet="Ingrediente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_IngredientesReceita_UsuarioReceita" Association="Self.FK_IngredientesReceita_UsuarioReceita">
+            <End Role="UsuarioReceita" EntitySet="UsuarioReceita" />
+            <End Role="IngredientesReceita" EntitySet="IngredientesReceita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_recipesRating_userRecipes" Association="Self.FK_recipesRating_userRecipes">
+            <End Role="UsuarioReceita" EntitySet="UsuarioReceita" />
+            <End Role="NotaReceita" EntitySet="NotaReceita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_recipesRating_users" Association="Self.FK_recipesRating_users">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="NotaReceita" EntitySet="NotaReceita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Perfil_Usuario" Association="Self.FK_Perfil_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Perfil" EntitySet="Perfil" />
+          </AssociationSet>
+          <AssociationSet Name="FK_usersRecipesProcedures_userRecipes" Association="Self.FK_usersRecipesProcedures_userRecipes">
+            <End Role="UsuarioReceita" EntitySet="UsuarioReceita" />
+            <End Role="ProcedimentoReceitas" EntitySet="ProcedimentoReceitas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_userFavoriteRecipes_userRecipes" Association="Self.FK_userFavoriteRecipes_userRecipes">
+            <End Role="UsuarioReceita" EntitySet="UsuarioReceita" />
+            <End Role="ReceitaFavorira" EntitySet="ReceitaFavorira" />
+          </AssociationSet>
+          <AssociationSet Name="FK_userFavoriteRecipes_users" Association="Self.FK_userFavoriteRecipes_users">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="ReceitaFavorira" EntitySet="ReceitaFavorira" />
+          </AssociationSet>
+          <AssociationSet Name="FK_userRecipes_recipeType" Association="Self.FK_userRecipes_recipeType">
+            <End Role="TipoReceita" EntitySet="TipoReceita" />
+            <End Role="UsuarioReceita" EntitySet="UsuarioReceita" />
+          </AssociationSet>
+          <AssociationSet Name="FK_userRecipes_users" Association="Self.FK_userRecipes_users">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="UsuarioReceita" EntitySet="UsuarioReceita" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="dbLivroReceitaModelStoreContainer" CdmEntityContainer="dbLivroReceitaEntities">
+          <EntitySetMapping Name="Ingrediente">
+            <EntityTypeMapping TypeName="dbLivroReceitaModel.Ingrediente">
+              <MappingFragment StoreEntitySet="Ingrediente">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="nome" ColumnName="nome" />
+                <ScalarProperty Name="ItemTipoID" ColumnName="ItemTipoID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IngredientesReceita">
+            <EntityTypeMapping TypeName="dbLivroReceitaModel.IngredientesReceita">
+              <MappingFragment StoreEntitySet="IngredientesReceita">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ReceitaID" ColumnName="ReceitaID" />
+                <ScalarProperty Name="IngredienteID" ColumnName="IngredienteID" />
+                <ScalarProperty Name="qtdGramas" ColumnName="qtdGramas" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NotaReceita">
+            <EntityTypeMapping TypeName="dbLivroReceitaModel.NotaReceita">
+              <MappingFragment StoreEntitySet="NotaReceita">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ReceitaID" ColumnName="ReceitaID" />
+                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
+                <ScalarProperty Name="nota" ColumnName="nota" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Perfil">
+            <EntityTypeMapping TypeName="dbLivroReceitaModel.Perfil">
+              <MappingFragment StoreEntitySet="Perfil">
+                <ScalarProperty Name="idPerfil" ColumnName="idPerfil" />
+                <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+                <ScalarProperty Name="idIngrediente" ColumnName="idIngrediente" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProcedimentoReceitas">
+            <EntityTypeMapping TypeName="dbLivroReceitaModel.ProcedimentoReceitas">
+              <MappingFragment StoreEntitySet="ProcedimentoReceitas">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="userRecipeID" ColumnName="userRecipeID" />
+                <ScalarProperty Name="step" ColumnName="step" />
+                <ScalarProperty Name="stepSequence" ColumnName="stepSequence" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReceitaFavorira">
+            <EntityTypeMapping TypeName="dbLivroReceitaModel.ReceitaFavorira">
+              <MappingFragment StoreEntitySet="ReceitaFavorira">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
+                <ScalarProperty Name="ReceitaID" ColumnName="ReceitaID" />
+                <ScalarProperty Name="saved" ColumnName="saved" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipoReceita">
+            <EntityTypeMapping TypeName="dbLivroReceitaModel.TipoReceita">
+              <MappingFragment StoreEntitySet="TipoReceita">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TiposItem">
+            <EntityTypeMapping TypeName="dbLivroReceitaModel.TiposItem">
+              <MappingFragment StoreEntitySet="TiposItem">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuario">
+            <EntityTypeMapping TypeName="dbLivroReceitaModel.Usuario">
+              <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="nome" ColumnName="nome" />
+                <ScalarProperty Name="senha" ColumnName="senha" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UsuarioReceita">
+            <EntityTypeMapping TypeName="dbLivroReceitaModel.UsuarioReceita">
+              <MappingFragment StoreEntitySet="UsuarioReceita">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
+                <ScalarProperty Name="NomeReceita" ColumnName="NomeReceita" />
+                <ScalarProperty Name="TipoReceitaID" ColumnName="TipoReceitaID" />
+                <ScalarProperty Name="TempoMinutos" ColumnName="TempoMinutos" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

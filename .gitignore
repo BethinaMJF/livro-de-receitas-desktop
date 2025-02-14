@@ -1,0 +1,14 @@
+﻿# Ignorar arquivos do Visual Studio
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+*.vspscc
+*.vssscc
+
+# Ignorar arquivos do banco de dados (se houver)
+*.mdf
+*.ldff
