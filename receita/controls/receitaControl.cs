@@ -15,53 +15,48 @@ namespace receita.models
     public partial class receitaControl : UserControl
     {
         dbLivroReceitaEntities ct = new dbLivroReceitaEntities();
-        public UsuarioReceita at { get; set; }
-        public principal hometela { get; set; } 
-        public receitaControl(UsuarioReceita rec)
+        public UsuarioReceita atual { get; set; }
+        public receitaControl(UsuarioReceita receita)
         {
             InitializeComponent();
 
-            label1.Text = rec.NomeReceita.ToString();
-            label3.Text = rec.TempoMinutos.ToString() + "min";
-            
-           pictureBox1.Image = (Image)Properties.Resources.ResourceManager.GetObject($"_{rec.id}");
+            label1.Text = receita.NomeReceita.ToString();
+            label3.Text = receita.TempoMinutos.ToString() + "min";
+            pictureBox1.Image = (Image)Properties.Resources.ResourceManager.GetObject($"_{receita.id}");
 
-
-            if (ct.ReceitaFavorira.FirstOrDefault(u=> u.UsuarioID == dados.atual.id && u.ReceitaID == rec.id) != null)
+            if (ct.ReceitaFavorira.FirstOrDefault(u=> u.UsuarioID == dados.atual.id && u.ReceitaID == receita.id) != null)
             {
-
                 pictureBox2.Image = (Bitmap)Properties.Resources.salvar_selecionada;
             }
             else
             {
                 pictureBox2.Image = (Bitmap)Properties.Resources.salvar;
-
             }
-            at = rec;
+            atual = receita;
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            new DETALHES(at).Show();
+            new detalhes(atual).Show();
         }
 
         private void pictureBox2_Click(object sender, EventArgs e)
         {
-            if (ct.ReceitaFavorira.FirstOrDefault(u => u.UsuarioID == dados.atual.id && u.ReceitaID == at.id) != null)
+            if (ct.ReceitaFavorira.FirstOrDefault(u => u.UsuarioID == dados.atual.id && u.ReceitaID == atual.id) != null)
             {
-                // esta salva - tirar
+                // Está salva (remover)
                 pictureBox2.Image = (Image)Properties.Resources.salvar;
-                var USER = ct.ReceitaFavorira.FirstOrDefault(u=> u.ReceitaID == at.id && u.UsuarioID == dados.atual.id);
-                ct.ReceitaFavorira.Remove(USER);
+                var favorita = ct.ReceitaFavorira.FirstOrDefault(u=> u.ReceitaID == atual.id && u.UsuarioID == dados.atual.id);
+                ct.ReceitaFavorira.Remove(favorita);
                 ct.SaveChanges();
 
             }
             else
             {
-                // nao esta - salva 
+                // Não esta salvar (adicionar) 
                 pictureBox2.Image = (Image)Properties.Resources.salvar_selecionada;
-                var user = new ReceitaFavorira() { ReceitaID = at.id, UsuarioID = dados.atual.id };
-                ct.ReceitaFavorira.Add(user);
+                var favorita = new ReceitaFavorira() { ReceitaID = atual.id, UsuarioID = dados.atual.id };
+                ct.ReceitaFavorira.Add(favorita);
                 ct.SaveChanges();
 
             }

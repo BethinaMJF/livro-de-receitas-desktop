@@ -21,12 +21,10 @@ namespace receita.pages
 
         private void salvas_Load(object sender, EventArgs e)
         {
-            foreach (var item in ct.UsuarioReceita)
+            var lista = ct.UsuarioReceita.Where(item => ct.ReceitaFavorira.Any(u => u.UsuarioID == dados.atual.id && u.ReceitaID == item.id));
+            foreach (var item in lista)
             {
-                if (ct.ReceitaFavorira.FirstOrDefault(u => u.UsuarioID == dados.atual.id && u.ReceitaID == item.id) != null)
-                {
-                    flowLayoutPanel1.Controls.Add(new models.receitaControl(item));
-                }
+                flowLayoutPanel1.Controls.Add(new models.receitaControl(item));
             }
         }
 
@@ -35,49 +33,43 @@ namespace receita.pages
             flowLayoutPanel1.Controls.Clear();
             var lista = new List<int>();
 
-            // pesquisa por nome
-            foreach (var item in ct.UsuarioReceita.Where(u => u.NomeReceita.ToLower().Contains(textBox1.Text.ToLower())))
-            {
-                lista.Add(item.id);
-            }
+            // Receitas por nome
+            lista.AddRange(ct.UsuarioReceita
+                .Where(u => u.NomeReceita.ToLower().Contains(textBox1.Text.ToLower()))
+                .Select(u => u.id));
 
-            // pesquisa por Nota
-            var notas = new List<UsuarioReceitaNotas>();
-            foreach (var item in ct.UsuarioReceita)
-            {
-                double nota = (double)(ct.NotaReceita.Where(u => u.ReceitaID == item.id).Sum(u => u.nota) / ct.NotaReceita.Where(u => u.ReceitaID == item.id).Count());
-                notas.Add(new UsuarioReceitaNotas() { idReceita = item.id, nota = nota });
-            }
-            var nv = notas.Where(u => u.nota.ToString().Contains(textBox1.Text));
-            foreach (var item in nv)
-            {
-                if (!lista.Contains(item.idReceita))
+            // Receitas por nota
+            var notas = ct.UsuarioReceita
+                .Select(u => new
                 {
-                    lista.Add(item.idReceita);
+                    u.id,
+                    nota = ct.NotaReceita.Where(n => n.ReceitaID == u.id).Average(n => (double?)n.nota) ?? 0
+                })
+                .Where(n => n.nota.ToString().Contains(textBox1.Text))
+                .Select(n => n.id);
+
+            lista.AddRange(notas.Except(lista));
+
+            // Receitas por ingredientes
+            var ingIds = ct.Ingrediente
+                .Where(i => i.nome.ToLower().Contains(textBox1.Text))
+                .Select(i => i.ID);
+
+            var recIds = ct.UsuarioReceita
+                .Where(u => ct.IngredientesReceita.Any(i => i.ReceitaID == u.id && ingIds.Contains(i.ID)))
+                .Select(u => u.id);
+
+            lista.AddRange(recIds.Except(lista));
+
+            foreach (var id in lista)
+            {
+                var receita = ct.UsuarioReceita.FirstOrDefault(u => u.id == id);
+                if (receita != null && ct.ReceitaFavorira.Any(f => f.UsuarioID == dados.atual.id && f.ReceitaID == receita.id))
+                {
+                    flowLayoutPanel1.Controls.Add(new models.receitaControl(receita));
                 }
             }
 
-            // Ing
-            var ing = ct.Ingrediente.Where(u => u.nome.ToLower().Contains(textBox1.Text)).Select(u => u.ID);
-            var rec = ct.UsuarioReceita.Where(u => ct.IngredientesReceita.Any(i => i.ReceitaID == u.id && ing.Contains(i.ID))).Select(u => u.id);
-
-            foreach (var item in rec)
-            {
-                if (!lista.Contains(item))
-                {
-                    lista.Add(item);
-                }
-            }
-
-
-            foreach (var item in lista)
-            {
-                var re = ct.UsuarioReceita.FirstOrDefault(u => u.id == item);
-                if (ct.ReceitaFavorira.FirstOrDefault(U=> U.UsuarioID == dados.atual.id && U.ReceitaID == re.id) != null)
-                {
-                    flowLayoutPanel1.Controls.Add(new models.receitaControl(re));
-                }
-            }
 
         }
 

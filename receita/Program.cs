@@ -22,8 +22,8 @@ namespace receita
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-
             var config = new Settings();
+
             if (config.uma == false)
             {
                 Application.Run(new Form1());

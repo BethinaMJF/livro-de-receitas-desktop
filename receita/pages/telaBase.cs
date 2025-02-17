@@ -66,9 +66,7 @@ namespace receita.pages
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var config = new Settings();
-            config.lembrar = null;
-            config.Save();
+            new Settings() { lembrar = null }.Save();
         }
 
   

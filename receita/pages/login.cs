@@ -39,25 +39,22 @@ namespace receita.pages
             if (textBox2.UseSystemPasswordChar)
             {
                 textBox2.UseSystemPasswordChar = false;
-
             }
             
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-
-            if (ct.Usuario.FirstOrDefault(u=> u.email == textBox1.Text && u.senha== textBox2.Text) != null)
+            var user = ct.Usuario.FirstOrDefault(u => u.email == textBox1.Text && u.senha == textBox2.Text);
+            if ( user != null)
             {
                 if (checkBox1.Checked)
                 {
-                    var s = new Settings();
-                    s.lembrar = textBox1.Text;
-                    s.Save();
+                    new Settings() { lembrar = textBox1.Text }.Save();
                 }
-                dados.atual = ct.Usuario.FirstOrDefault(u => u.email == textBox1.Text && u.senha == textBox2.Text);
+                dados.atual = user;
                 new telaBase().Show(); 
-                this.Hide();
+                Hide();
             }
             else
             {
@@ -68,20 +65,17 @@ namespace receita.pages
         private void pictureBox2_MouseUp(object sender, MouseEventArgs e)
         {
             textBox2.UseSystemPasswordChar = true;
-
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             new cadastro().Show();
-            this.Hide();
+            Hide();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            var s = new Settings();
-            s.uma = false;
-            s.Save();
+            new Settings() { uma = false}.Save();
         }
     }
 }

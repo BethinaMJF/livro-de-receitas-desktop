@@ -16,120 +16,106 @@ namespace receita
     public partial class Form1 : Form2
     {
         public int ind { get; set; } = 1;
+        public List<Image> lista = new List<Image>() 
+        {
+            (Image)Properties.Resources.p1,
+            (Image)Properties.Resources.p2,
+            (Image)Properties.Resources.p3,
+            (Image)Properties.Resources.p4,
+            (Image)Properties.Resources.p4 // para evitar erro de indice
+
+        };   
         public Form1()
         {
             InitializeComponent();
-
-            label1.Text = "●";
-            pictureBox1.Image = Properties.Resources.p1;
+            ind = 1;
+            verificar();
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ind--;
+            verificar();
+        }
         private void button2_Click(object sender, EventArgs e)
         {
-            if (ind >= 2)
-            {
-                button1.Enabled = true;
-            }
-            else
-            {
-                button1.Enabled = false;
-            }
-
             if (ind <= 4)
             {
-                ind++;
-                ve();
-                
-            }
-            if (ind > 4)
-            {
-                var s = new Settings();
-                s.uma = true;
-                s.Save();
-                new login().Show();
-                this.Hide();
-            }
-
+                ind++; 
+                verificar(); 
+            }           
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
             ind = 1;
-            ve();
+            verificar();
         }
+
 
         private void label2_Click(object sender, EventArgs e)
         {
             ind = 2;
-            ve();
+            verificar();
 
         }
 
         private void label3_Click(object sender, EventArgs e)
         {
             ind = 3;
-            ve();
+            verificar();
 
         }
 
         private void label4_Click(object sender, EventArgs e)
         {
             ind = 4;
-            ve();
+            verificar();
 
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void limpar()
         {
-
+            label1.Text = "◌";
+            label2.Text = "◌";
+            label3.Text = "◌";
+            label4.Text = "◌";
         }
-        private void ve()
+        private void verificar()
         {
-            if (ind == 1)
+            if (ind > 4)
             {
-                label1.Text = "●";
-                pictureBox1.Image = Properties.Resources.p1;
-
-                label2.Text = "◌";
-                label3.Text = "◌";
-                label4.Text = "◌";
-
-                
-
+                new Settings { uma = true }.Save();
+                new login().Show();
+                Hide();
+                return; // Sai do método para evitar execução desnecessária
             }
-            else if (ind == 2)
+
+            limpar();
+            switch (ind)
             {
-                label2.Text = "●";
-                pictureBox1.Image = Properties.Resources.p;
+                case 1:
+                    label1.Text = "●";
+                    break;
+                case 2:
+                    label2.Text = "●";
+                    break;
+                case 3:
+                    label3.Text = "●";
+                    break;
+                case 4:
+                    label4.Text = "●";
+                    break;
 
-                label1.Text = "◌";
-                label3.Text = "◌";
-                label4.Text = "◌";
-            }
-            else if (ind == 3)
-            {
-                label3.Text = "●";
-                pictureBox1.Image = Properties.Resources.pp;
+                    
+                default: 
+                    break;
+            };
+            button1.Enabled = ind >= 2;
+            pictureBox1.Image = lista[ind - 1];
 
-                label2.Text = "◌";
-                label1.Text = "◌";
-                label4.Text = "◌";
-            }
-            else if (ind == 4)
-            {
-                label4.Text = "●";
-                pictureBox1.Image = Properties.Resources.ppp;
-
-                label2.Text = "◌";
-                label3.Text = "◌";
-                label1.Text = "◌";
-            }
+            
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            ind--;
-            ve();
-        }
     }
 }

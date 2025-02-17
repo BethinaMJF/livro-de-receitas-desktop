@@ -1,7 +1,12 @@
-﻿namespace receita.pages
+﻿using receita.models;
+using System.Linq;
+
+namespace receita.pages
 {
     internal class teste
     {
+        internal IQueryable<NotaReceita> totalNotas;
+
         public teste()
         {
         }

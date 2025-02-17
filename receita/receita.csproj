@@ -148,11 +148,11 @@
     <Compile Include="pages\cadastro.Designer.cs">
       <DependentUpon>cadastro.cs</DependentUpon>
     </Compile>
-    <Compile Include="pages\DETALHES.cs">
+    <Compile Include="pages\detalhes.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="pages\DETALHES.Designer.cs">
-      <DependentUpon>DETALHES.cs</DependentUpon>
+    <Compile Include="pages\detalhes.Designer.cs">
+      <DependentUpon>detalhes.cs</DependentUpon>
     </Compile>
     <Compile Include="models\dados.cs" />
     <Compile Include="models\gosto.cs" />
@@ -161,12 +161,6 @@
     </Compile>
     <Compile Include="pages\BemVindo.Designer.cs">
       <DependentUpon>BemVindo.cs</DependentUpon>
-    </Compile>
-    <Compile Include="controls\ingDrop.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="controls\ingDrop.Designer.cs">
-      <DependentUpon>ingDrop.cs</DependentUpon>
     </Compile>
     <Compile Include="pages\login.cs">
       <SubType>Form</SubType>
@@ -221,14 +215,11 @@
     <EmbeddedResource Include="pages\cadastro.resx">
       <DependentUpon>cadastro.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="pages\DETALHES.resx">
-      <DependentUpon>DETALHES.cs</DependentUpon>
+    <EmbeddedResource Include="pages\detalhes.resx">
+      <DependentUpon>detalhes.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="pages\BemVindo.resx">
       <DependentUpon>BemVindo.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="controls\ingDrop.resx">
-      <DependentUpon>ingDrop.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="pages\login.resx">
       <DependentUpon>login.cs</DependentUpon>
@@ -285,6 +276,7 @@
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
     <Content Include=".gitignore" />
+    <None Include="Resources\duvida.png" />
     <None Include="README.md" />
     <None Include="Resources\p1.png" />
     <None Include="Resources\ppp.png" />
