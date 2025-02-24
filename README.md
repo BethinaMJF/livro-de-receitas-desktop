@@ -48,7 +48,7 @@ A aplicação utiliza **C# com Windows Forms**, **Entity Framework (ADO.NET)** p
 ### 1️⃣  **Clone este repositório**:
 
 ```sh
-   git clone https://github.com/seu-usuario/livro-de-receitas.git
+   git clone https://github.com/BethinaMJF/livro-de-receitas-desktop.git
 ````
 
 ### 2️⃣ Configure o Banco de Dados
